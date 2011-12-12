@@ -35,8 +35,19 @@ public class Agenda extends MIDlet implements CommandListener{
     private Image excluirImage;    
     private Image pesquisarImage;    
     private StringItem apresentaContato;
-    
+
     private List menu;   
+    
+     TextField nomeContatoTela;
+     TextField foneContatoTela;
+     TextField celularContatoTela;
+     TextField emailContatoTela;
+     
+    TextField nomeContatoExclusao;
+    TextField foneContatoExclusao;
+    TextField celularContatoExclusao;
+    TextField emailContatoExclusao;
+  
     
     // FORMULARIO DO MENU PRINCIPAL
     public List getFormPrincipal() throws IOException{                
@@ -102,8 +113,7 @@ public class Agenda extends MIDlet implements CommandListener{
     /**
      * The Agenda constructor.
      */
-    public Agenda() {
-    }
+   
 
     //<editor-fold defaultstate="collapsed" desc=" Generated Methods ">//GEN-BEGIN:|methods|0|
     //</editor-fold>//GEN-END:|methods|0|
@@ -258,24 +268,23 @@ public class Agenda extends MIDlet implements CommandListener{
          ContatoDaoImpl  contatoDaoImpl = new ContatoDaoImpl();
          try {
             ValidarContato validarContato = new ValidarContato(c);
-            validarContato.validarContatoInteiro();
-            
+            validarContato.validarContatoInteiro();    
+            contatoDaoImpl.alterarContato(c);
+            formListarTodos();
         } catch (Exception e) {
            System.out.println(e.toString());   
            Alert alert = new Alert("Aviso:",e.toString(),null, AlertType.INFO);
            alert.setTimeout(Alert.FOREVER);
            trocaDisplayable(alert,getFormPrincipal());          
-        }finally{      
-            contatoDaoImpl.alterarContato(c);
-            formListarTodos();
-         }
+        }
     }
         
     public void startApp() {    
-    
+        
         setDisplay(Display.getDisplay(this));
         try {
             trocaDisplayable(null, new SplashScreen(getDisplay(), getFormPrincipal()));
+           
         } catch (IOException ex) {
             ex.printStackTrace();
         }
@@ -356,15 +365,20 @@ public class Agenda extends MIDlet implements CommandListener{
         mostraContatoNaTela.addCommand(exitCommand);
         contato.imprimeContato();
         
-        final TextField nome = new TextField("Nome", contato.getNome(),50, TextField.ANY);
-        final TextField fone = new TextField("Fone", contato.getFone(),15, TextField.ANY);
-        final TextField celular = new TextField("Celular", contato.getCelular(), 15, TextField.ANY);
-        final TextField email = new TextField("Email", contato.getEmail(),50, TextField.EMAILADDR);
+        this.nomeContatoTela = new TextField("Nome", "",50, TextField.ANY);
+        this.foneContatoTela = new TextField("Fone", "",15, TextField.ANY);
+        this.celularContatoTela = new TextField("Celular", "", 15, TextField.ANY);
+        this.emailContatoTela = new TextField("Email", "",50, TextField.EMAILADDR);
         
-        mostraContatoNaTela.append(nome);
-        mostraContatoNaTela.append(fone);
-        mostraContatoNaTela.append(celular);
-        mostraContatoNaTela.append(email);
+        nomeContatoTela.setString(contato.getNome());
+        foneContatoTela.setString(contato.getFone());
+        celularContatoTela.setString(contato.getCelular());
+        emailContatoTela.setString(contato.getEmail());
+        
+        mostraContatoNaTela.append(nomeContatoTela);
+        mostraContatoNaTela.append(foneContatoTela);
+        mostraContatoNaTela.append(celularContatoTela);
+        mostraContatoNaTela.append(emailContatoTela);
         
         Display.getDisplay(this).setCurrent(mostraContatoNaTela);
          
@@ -374,15 +388,15 @@ public class Agenda extends MIDlet implements CommandListener{
                  if(c==comandoVoltar){
                         formListarTodos();                  
                  }else if(c==comandoAlterarContato){
-                       contato.setNome(nome.getString().trim());
-                       contato.setFone(fone.toString().trim());
-                       contato.setCelular(celular.getString().trim());
-                       contato.setEmail(email.getString().trim());
-                    try {
-                        updateContato(contato);
-                    } catch (Exception ex) {
-                        ex.printStackTrace();
-                    }
+                       contato.setNome(nomeContatoTela.getString().trim());
+                       contato.setFone(foneContatoTela.getString().trim());
+                       contato.setCelular(celularContatoTela.getString().trim());
+                       contato.setEmail(emailContatoTela.getString().trim());
+                        try {
+                            updateContato(contato);
+                        } catch (Exception ex) {
+                            ex.printStackTrace();
+                        }
                  }else if(c==exitCommand){
                       destroyApp(false);
                       notifyDestroyed();
@@ -491,15 +505,22 @@ public class Agenda extends MIDlet implements CommandListener{
         final Command sim = new Command("Sim", Command.ITEM, 1);
         final Command nao = new Command("Nao", contadorContatos, 2);
         
-        final TextField nome = new TextField("Nome", contato.getNome(),15, TextField.UNEDITABLE);
-        final TextField fone = new TextField("Fone", contato.getFone(),15, TextField.UNEDITABLE);
-        final TextField celular = new TextField("Celular", contato.getCelular(), 15, TextField.UNEDITABLE);
-        final TextField email = new TextField("Email", contato.getEmail(),15, TextField.UNEDITABLE);
+        nomeContatoExclusao = new TextField("Nome","",50, TextField.UNEDITABLE);
+        foneContatoExclusao = new TextField("Fone","",15, TextField.UNEDITABLE);
+        celularContatoExclusao = new TextField("Celular","", 15, TextField.UNEDITABLE);
+        emailContatoExclusao = new TextField("Email","",50, TextField.UNEDITABLE);
         
-        formDeExclusao.append(nome);
-        formDeExclusao.append(fone);
-        formDeExclusao.append(celular);
-        formDeExclusao.append(email);
+        nomeContatoExclusao.setString(contato.getNome());
+        foneContatoExclusao.setString(contato.getFone());
+        celularContatoExclusao.setString(contato.getCelular());
+        emailContatoExclusao.setString(contato.getEmail());
+        
+        
+        
+        formDeExclusao.append(nomeContatoExclusao);
+        formDeExclusao.append(foneContatoExclusao);
+        formDeExclusao.append(celularContatoExclusao);
+        formDeExclusao.append(emailContatoExclusao);
     
         formDeExclusao.addCommand(back);
         formDeExclusao.addCommand(sim);

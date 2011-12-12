@@ -75,6 +75,9 @@ public class ContatoDaoImpl implements ContatoDao {
             RecordStore recordStore = banco.getRecordStore();            
             String contato = c.getNome()+";"+c.getFone()+";"+c.getCelular()+";"+c.getEmail()+";"+c.getId();
             byte[] contatoByte = contato.getBytes();
+            
+            System.out.println("Test contato Id : " + c.getId());
+            
             recordStore.setRecord(c.getId(), contatoByte, 0, contatoByte.length);
         } catch (Exception ex) {
             ex.printStackTrace();
