@@ -4,6 +4,7 @@
  */
 package persistence;
 
+import javax.microedition.rms.RecordEnumeration;
 import javax.microedition.rms.RecordStore;
 
 /**
@@ -15,6 +16,8 @@ public class Banco {
     private static Banco banco; // design pattern sigleton.
     private RecordStore recordStore;
     static final String REC_STORE = "AGENDA";
+    private OrdenaRms ordenaRms;
+    private RecordEnumeration numeroRms;
     
     private Banco(){
        super();
@@ -41,6 +44,8 @@ public class Banco {
               // The second parameter indicates that the record store
               // should be created if it does not exist
               recordStore = RecordStore.openRecordStore(REC_STORE, true );
+              
+              
             }
             catch (Exception e)
             {
@@ -48,7 +53,17 @@ public class Banco {
             }finally{
                 return recordStore;
             }
-      }    
+      }
+     
+     public RecordEnumeration initEnumeration(RecordStore rms){             
+      try{  
+         if (rms.getNumRecords() > 0){  
+            ordenaRms = new OrdenaRms();            
+            numeroRms = rms.enumerateRecords(null, ordenaRms, true);  
+         }    
+      }catch (Exception e){System.out.println("Thomazini "+ e);}  
+      return numeroRms;  
+   } 
  
       public void closeRecStore(){
                 try

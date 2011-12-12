@@ -38,7 +38,10 @@ public class ContatoDaoImpl implements ContatoDao {
         try {
             banco.openRecStore();           
             RecordStore recordStore = banco.getRecordStore();
-            RecordEnumeration enum = recordStore.enumerateRecords(null, null, false);
+           // RecordEnumeration enum = recordStore.enumerateRecords(null, null, false)
+            
+            RecordEnumeration enum = Banco.getInstance().initEnumeration(recordStore);
+            
             while ( enum.hasNextElement()) {
                 //armazena o próximo registro em um String
                 String contatoString = new String(enum.nextRecord());
@@ -108,7 +111,10 @@ public class ContatoDaoImpl implements ContatoDao {
         try {
             banco.openRecStore();
             RecordStore recordStore = banco.getRecordStore();
-            RecordEnumeration enum = recordStore.enumerateRecords(null, null, false);
+            //RecordEnumeration enum = recordStore.enumerateRecords(null, null, false);
+            
+            RecordEnumeration enum = Banco.getInstance().initEnumeration(recordStore);
+            
             System.out.println("\nListar Todos os Contatos :: \n");
             while ( enum.hasNextElement()){
                 //armazena o próximo registro em um String

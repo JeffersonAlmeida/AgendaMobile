@@ -309,14 +309,13 @@ public class Agenda extends MIDlet implements CommandListener{
          }
     }
 
-    public void salvarContato(Contato contato) throws Exception {
-        setContadorContatos(getContadorContatos()+1);   
-        contato.setId(getContadorContatos());
-        ContatoDaoImpl contatoDaoImpl = new ContatoDaoImpl();
-        
+    public void salvarContato(Contato contato) throws Exception {       
+        ContatoDaoImpl contatoDaoImpl = new ContatoDaoImpl();  
         try {
             ValidarContato validarContato = new ValidarContato(contato);
             validarContato.validarContatoInteiro();
+            setContadorContatos(getContadorContatos()+1);   
+            contato.setId(getContadorContatos());
             contatoDaoImpl.incluirContato(contato);
             formListarTodos();
         } catch (Exception e) {
@@ -324,8 +323,7 @@ public class Agenda extends MIDlet implements CommandListener{
            Alert alert = new Alert("Aviso:",e.toString(),null, AlertType.INFO);
            alert.setTimeout(Alert.FOREVER);
            trocaDisplayable(alert,menu);          
-        }
-        
+        }        
     }
 
     public Form getInserirContatoForm(){
